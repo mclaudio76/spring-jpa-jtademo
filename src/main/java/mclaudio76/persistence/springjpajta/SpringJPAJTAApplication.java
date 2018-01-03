@@ -31,7 +31,7 @@ public class SpringJPAJTAApplication {
         	Person p = new Person();
         	p.id     = 4000;
         	p.firstName = "John";
-        	p.lastName  = "Doe";
+        	p.lastName  = "Doe"; 
         	personDao.savePerson("primary",p);
         	personDao.savePerson("secondary",p);
         };
