@@ -29,9 +29,9 @@ public class SpringJPAJTAApplication {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
         	Person p = new Person();
-        	p.id     = 600;
-        	p.firstName = "Claude";
-        	p.lastName  = "Moore";
+        	p.id     = 4000;
+        	p.firstName = "John";
+        	p.lastName  = "Doe";
         	personDao.savePerson("primary",p);
         	personDao.savePerson("secondary",p);
         };
