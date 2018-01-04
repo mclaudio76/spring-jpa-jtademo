@@ -28,11 +28,12 @@ public class SpringJPAJTAApplication {
 	@Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
+        	System.err.println("Init....");
         	Person p = new Person();
-        	p.id     = 4112;
+        	p.id     = 25;
         	p.firstName = "John";
         	p.lastName  = "Doe"; 
-        	personDao.savePerson(p);
+        	personDao.savePerson(p,true);
         	System.err.println("Done !");
         };
     }
