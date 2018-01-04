@@ -5,6 +5,13 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Service;
 
+/****
+ * Acts as service locator.
+ * This class injects all of available PersistenceUnits, and returns a selected one via getEntityManager().
+ * 
+ *
+ */
+
 @Service
 public class EntityManagerLocator {
 	

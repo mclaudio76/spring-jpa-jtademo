@@ -10,6 +10,7 @@ import mclaudio76.persistence.springjpajta.services.JTAPlatform;
 
 @Configuration
 public class JTAConfiguration {
+	
 	@Autowired
 	JTAPlatform jtaPlatform;
 	
