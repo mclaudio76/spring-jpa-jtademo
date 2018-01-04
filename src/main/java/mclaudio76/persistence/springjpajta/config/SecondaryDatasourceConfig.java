@@ -28,7 +28,6 @@ public class SecondaryDatasourceConfig {
         properties.setProperty("hibernate.connection.autocommit", "false");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.setProperty("hibernate.transaction.coordinator_class", "jta");
-        //properties.setProperty("hibernate.transaction.jta.platform", JTAPlatform.class.getCanonicalName());
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
         return em;
@@ -44,17 +43,5 @@ public class SecondaryDatasourceConfig {
 		return dataSource;
 	} 
 	
-	/*@Bean
-	public DataSource datasource() {
-		MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
-		mysqlXaDataSource.setUrl("jdbc:mysql://localhost:3306/secondpersistence");
-		mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
-		mysqlXaDataSource.setPassword("spring");
-		mysqlXaDataSource.setUser("spring");
-		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-		xaDataSource.setXaDataSource(mysqlXaDataSource);
-		xaDataSource.setUniqueResourceName("xads"); 
-		xaDataSource.setMaxPoolSize(100);
-		return xaDataSource;
-	} */
+	
 }

@@ -8,6 +8,12 @@ import org.springframework.stereotype.Component;
 
 import com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple;
 
+/****
+ * Provides a JTAPlatform wrapper using Narayana JTA implementation by RedHat / JBoss.
+ * One may use other JTA open providers, like Atomikos for example.
+ *
+ */
+
 @Component
 public class JTAPlatform extends AbstractJtaPlatform{
 

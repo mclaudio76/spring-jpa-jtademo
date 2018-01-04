@@ -14,6 +14,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import mclaudio76.persistence.springjpajta.entities.Person;
 import mclaudio76.persistence.springjpajta.services.PersonDAO;
 
+/****
+ * We need to exclude DataSoruceAutoConfiguration.class and similar to avoid nasty errors due to Spring trying to instantiate
+ * default datasources and other default configs.
+ * 
+ */
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class,XADataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 @EnableTransactionManagement
 public class SpringJPAJTAApplication {
@@ -30,7 +35,7 @@ public class SpringJPAJTAApplication {
         return args -> {
         	System.err.println("Init....");
         	Person p = new Person();
-        	p.id     = 29;
+        	p.id     = 39;
         	p.firstName = "John";
         	p.lastName  = "Doe"; 
         	personDao.savePerson(p);

@@ -11,8 +11,18 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-
-
+/*****
+ * Provides an EntityManager configuration for a MySQL datasource.
+ * 
+ * It's worth noting that :
+ * 
+ * - LocalContainerEntityManagerFactoryBean is annotatated with @Bean(name=identifier), so that we can later
+ *       inject it with @PersistenceContext(unitName=identifier) (@see EntityManagerLocator)
+ * 
+ * - I did not used an XA Connection.
+ *
+ * - We need to tell Hibernate to use JTA as transaction manager, putting hibernate.transaction.coordinator_class = jta.
+ */
 
 @Configuration
 public class PrimaryDatasourceConfig {
@@ -30,6 +40,7 @@ public class PrimaryDatasourceConfig {
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.connection.autocommit", "false");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        // MOST IMPORTANT ! We need to tell Hibernate to use JTA as transaction coordinator.
         properties.setProperty("hibernate.transaction.coordinator_class", "jta");
         //properties.setProperty("hibernate.transaction.jta.platform", JTAPlatform.class.getCanonicalName());
         em.setJpaProperties(properties);

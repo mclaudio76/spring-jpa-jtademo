@@ -4,6 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/*** Trivial Entity Class. 
+ * 
+ */
+
 @Entity
 public class Person {
 	
