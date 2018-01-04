@@ -22,17 +22,15 @@ public class PersonDAO {
 	public void savePerson(String which, Person p) {
 		EntityManager em = locator.getEntityManager(which);
 		em.persist(p);
-		em.flush();
 	}
 	
 	@Transactional(rollbackFor=Exception.class)
-	public void savePerson(Person p, boolean mustRaiseError) throws Exception {
+	public void savePerson(Person p) throws Exception {
 		EntityManager em = locator.getEntityManager("secondary");
 		em.persist(p);
-		if(mustRaiseError) {
-			throw new Exception("EEE");
+		if(p.id % 2 == 0) {
+			throw new Exception("Person IDs must be odd values.");
 		}
-		//em.flush();
 	}
 	
 }

@@ -3,9 +3,7 @@ package mclaudio76.persistence.springjpajta.config;
 import java.util.Properties;
 
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -13,16 +11,8 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-import com.atomikos.jdbc.AtomikosDataSourceBean;
-import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
-
-import mclaudio76.persistence.springjpajta.services.JTAPlatform;
-
 @Configuration
 public class SecondaryDatasourceConfig {
-	
-	@Autowired
-	TransactionManager txManager;
 	
 	
 	@Bean(name="mysql-secondaryjpa")
@@ -38,7 +28,7 @@ public class SecondaryDatasourceConfig {
         properties.setProperty("hibernate.connection.autocommit", "false");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.setProperty("hibernate.transaction.coordinator_class", "jta");
-        properties.setProperty("hibernate.transaction.jta.platform", JTAPlatform.class.getCanonicalName());
+        //properties.setProperty("hibernate.transaction.jta.platform", JTAPlatform.class.getCanonicalName());
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
         return em;

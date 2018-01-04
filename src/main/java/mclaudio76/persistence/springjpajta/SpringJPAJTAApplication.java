@@ -30,10 +30,10 @@ public class SpringJPAJTAApplication {
         return args -> {
         	System.err.println("Init....");
         	Person p = new Person();
-        	p.id     = 25;
+        	p.id     = 29;
         	p.firstName = "John";
         	p.lastName  = "Doe"; 
-        	personDao.savePerson(p,true);
+        	personDao.savePerson(p);
         	System.err.println("Done !");
         };
     }
