@@ -25,7 +25,6 @@ public class PrimaryDatasourceConfig {
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.setProperty("hibernate.transaction.coordinator_class", "jta");
-        properties.setProperty("hibernate.transaction.jta.platform", mclaudio76.persistence.springjpajta.services.JTAPlatform.class.getCanonicalName());
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
         return em;

@@ -25,5 +25,15 @@ public class PersonDAO {
 		em.flush();
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRES_NEW, rollbackFor=Exception.class)
+	public void savePerson(Person p) throws Exception {
+		EntityManager em = locator.getEntityManager("primary");
+		em.persist(p);
+		em.flush();
+		em = locator.getEntityManager("secondary");
+		em.persist(p);
+		em.flush();
+		throw new Exception("Operation canceled ");
+	}
 	
 }

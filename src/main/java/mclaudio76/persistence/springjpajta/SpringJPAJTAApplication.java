@@ -29,11 +29,11 @@ public class SpringJPAJTAApplication {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
         	Person p = new Person();
-        	p.id     = 4000;
+        	p.id     = 4112;
         	p.firstName = "John";
         	p.lastName  = "Doe"; 
-        	personDao.savePerson("primary",p);
-        	personDao.savePerson("secondary",p);
+        	personDao.savePerson(p);
+        	System.err.println("Done !");
         };
     }
 }
