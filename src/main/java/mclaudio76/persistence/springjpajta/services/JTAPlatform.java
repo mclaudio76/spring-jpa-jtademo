@@ -7,6 +7,7 @@ import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatfor
 import org.springframework.stereotype.Component;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
+import com.atomikos.icatch.jta.UserTransactionManager;
 
 /****
  * Provides a JTAPlatform wrapper using Narayana JTA implementation by RedHat / JBoss.
@@ -21,8 +22,7 @@ public class JTAPlatform extends AbstractJtaPlatform{
 
 	@Override
 	protected TransactionManager locateTransactionManager() {
-		TransactionManager txManager =  new com.atomikos.icatch.jta.UserTransactionManager();
-		//com.arjuna.ats.jta.TransactionManager.transactionManager();
+		UserTransactionManager txManager =  new com.atomikos.icatch.jta.UserTransactionManager();
 		return txManager;
 	}
 
