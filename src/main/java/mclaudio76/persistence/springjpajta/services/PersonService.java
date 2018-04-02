@@ -24,6 +24,7 @@ public class PersonService {
 	
 	public void savePerson(Person p) {
 		EntityManager em = locator.getEntityManager("primary");
+		
 		dao.savePerson(em, p);
 	}
 

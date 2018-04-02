@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import com.atomikos.icatch.jta.UserTransactionImp;
 
 /****
- * Provides a JTAPlatform wrapper using Narayana JTA implementation by RedHat / JBoss.
- * One may use other JTA open providers, like Atomikos for example.
+ * Provides a JTAPlatform wrapper using Atomikos JTA.
+ * One may use other JTA open providers.
  *
  */
 

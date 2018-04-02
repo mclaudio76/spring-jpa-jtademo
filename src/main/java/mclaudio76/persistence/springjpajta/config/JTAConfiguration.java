@@ -13,7 +13,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import com.atomikos.icatch.config.UserTransactionService;
 import com.atomikos.icatch.config.UserTransactionServiceImp;
 import com.atomikos.icatch.jta.UserTransactionImp;
-import com.atomikos.icatch.jta.UserTransactionManager;
+import com.atomikos.icatch.jta.UserTransactionManager; 
 
 @Configuration
 public class JTAConfiguration {
@@ -26,7 +26,7 @@ public class JTAConfiguration {
 		atProps.put("com.atomikos.icatch.log_base_dir", "D:\\Works\\TransactionLog");
 		atProps.put("com.atomikos.icatch.default_jta_timeout", "12345");
 		return new UserTransactionServiceImp(atProps);
-	}
+	} 
 	
 	@Bean("CustomTransactionManager")
 	public PlatformTransactionManager getTransactionManager() {
@@ -37,7 +37,8 @@ public class JTAConfiguration {
 	
 	@Bean("JTAPlatformTransactionManager")
 	public TransactionManager transactionManager() {
-		UserTransactionManager txManager =  new com.atomikos.icatch.jta.UserTransactionManager();
+		UserTransactionManager txManager = new com.atomikos.icatch.jta.UserTransactionManager();
+		txManager.setStartupTransactionService(true);
 		return txManager;
 	}
 
@@ -49,3 +50,4 @@ public class JTAConfiguration {
 	
 	
 }
+
