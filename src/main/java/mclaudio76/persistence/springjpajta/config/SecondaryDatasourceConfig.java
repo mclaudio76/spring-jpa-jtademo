@@ -4,8 +4,10 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -16,18 +18,14 @@ public class SecondaryDatasourceConfig {
 	
 	
 	@Bean(name="mysql-secondaryjpa")
-    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory() {
+	@DependsOn("CustomTransactionManager")
+    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(datasource());
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setPersistenceUnitName("mysql-secondaryjpa");
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.connection.autocommit", "false");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-        properties.setProperty("hibernate.transaction.coordinator_class", "jta");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
         return em;

@@ -3,10 +3,7 @@ package mclaudio76.persistence.springjpajta.services;
 
 import javax.persistence.EntityManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 import mclaudio76.persistence.springjpajta.entities.Person;
 
@@ -18,28 +15,15 @@ import mclaudio76.persistence.springjpajta.entities.Person;
  * 
  */
 
-@Service
-@Transactional
+@Component("PersonDAO")
 public class PersonDAO {
 	
-	@Autowired
-	EntityManagerLocator locator;
-
-	@Transactional(propagation=Propagation.REQUIRES_NEW)
-	public void savePerson(String which, Person p) {
-		EntityManager em = locator.getEntityManager(which);
-		em.persist(p);
+	public void savePerson(EntityManager em, Person p) {
+		em.persist(em.contains(p) ? p : em.merge(p));
 	}
-	
-	@Transactional(rollbackFor=Exception.class)
-	public void savePerson(Person p) throws Exception {
-		EntityManager em = locator.getEntityManager("secondary");
-		em.persist(p);
-		em = locator.getEntityManager("primary");
-		em.persist(p);
-		if(p.id % 2 == 0) {
-			throw new Exception("Person IDs must be odd values.");
-		}
+
+	public void deletePerson(EntityManager em, Person p) {
+		em.remove(em.contains(p) ? em : em.merge(p));
 	}
 	
 }

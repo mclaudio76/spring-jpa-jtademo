@@ -6,7 +6,7 @@ import javax.transaction.UserTransaction;
 import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatform;
 import org.springframework.stereotype.Component;
 
-import com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple;
+import com.atomikos.icatch.jta.UserTransactionImp;
 
 /****
  * Provides a JTAPlatform wrapper using Narayana JTA implementation by RedHat / JBoss.
@@ -21,12 +21,27 @@ public class JTAPlatform extends AbstractJtaPlatform{
 
 	@Override
 	protected TransactionManager locateTransactionManager() {
-		return com.arjuna.ats.jta.TransactionManager.transactionManager();
+		TransactionManager txManager =  new com.atomikos.icatch.jta.UserTransactionManager();
+		//com.arjuna.ats.jta.TransactionManager.transactionManager();
+		return txManager;
 	}
 
 	@Override
 	protected UserTransaction locateUserTransaction() {
-		return new UserTransactionImple();
+		try {
+			UserTransactionImp userTransaction = new UserTransactionImp();
+			log("Current User transaction "+userTransaction.toString());
+			
+			return userTransaction;
+		}
+		catch(Exception exp) {
+			log("Unable to locate an user transaction");
+			return null;
+		}
+	}
+	
+	private void log(String mex) {
+		System.err.println("[JTAPlatform] >> "+mex);
 	}
 
 }

@@ -3,7 +3,7 @@ package mclaudio76.persistence.springjpajta.services;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /****
  * Acts as service locator.
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  *
  */
 
-@Service
+@Component
 public class EntityManagerLocator {
 	
 	private EntityManager primaryJPA   = null;

@@ -4,12 +4,16 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
+import mclaudio76.persistence.springjpajta.services.JTAPlatform;
 
 /*****
  * Provides an EntityManager configuration for a MySQL datasource.
@@ -29,20 +33,14 @@ public class PrimaryDatasourceConfig {
 	
 	
 	@Bean(name="mysql-primaryjpa")
-    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory() {
+	@DependsOn("CustomTransactionManager")
+    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(datasource());
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setPersistenceUnitName("mysql-primaryjpa");
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.connection.autocommit", "false");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-        // MOST IMPORTANT ! We need to tell Hibernate to use JTA as transaction coordinator.
-        properties.setProperty("hibernate.transaction.coordinator_class", "jta");
-        //properties.setProperty("hibernate.transaction.jta.platform", JTAPlatform.class.getCanonicalName());
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
         return em;

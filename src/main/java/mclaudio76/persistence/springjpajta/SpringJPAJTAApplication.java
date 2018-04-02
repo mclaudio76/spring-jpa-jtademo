@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import mclaudio76.persistence.springjpajta.entities.Person;
-import mclaudio76.persistence.springjpajta.services.PersonDAO;
+import mclaudio76.persistence.springjpajta.services.PersonService;
 
 /****
  * We need to exclude DataSoruceAutoConfiguration.class and similar to avoid nasty errors due to Spring trying to instantiate
@@ -24,7 +24,7 @@ import mclaudio76.persistence.springjpajta.services.PersonDAO;
 public class SpringJPAJTAApplication {
 
 	@Autowired
-	PersonDAO personDao;
+	PersonService service;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringJPAJTAApplication.class, args);
@@ -38,8 +38,12 @@ public class SpringJPAJTAApplication {
         	p.id     = 39;
         	p.firstName = "John";
         	p.lastName  = "Doe"; 
-        	personDao.savePerson(p);
-        	System.err.println("Done !");
+        	service.savePerson(p);
+        	System.err.println("Saved");
+        	service.removePerson(p);
+        	service.doBoth(p);
+        	service.doBoth(p);
+        	service.doBoth(p);
         };
     }
 }
