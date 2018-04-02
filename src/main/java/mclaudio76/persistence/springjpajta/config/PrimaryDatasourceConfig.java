@@ -9,11 +9,11 @@ import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import com.microsoft.sqlserver.jdbc.SQLServerXADataSource;
 import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
 
 /*****
@@ -53,21 +53,26 @@ public class PrimaryDatasourceConfig {
 		mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
 		mysqlXaDataSource.setPassword("spring");
 		mysqlXaDataSource.setUser("spring");
+		
 		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
 		xaDataSource.setXaDataSource(mysqlXaDataSource);
+		xaDataSource.setUniqueResourceName("xads");
+		xaDataSource.setMaxPoolSize(100);
+		xaDataSource.setMinPoolSize(1); 
+		return xaDataSource;
+	}
+	
+	
+	private DataSource sqlServerDataSource() {
+		SQLServerXADataSource xa = new SQLServerXADataSource();
+		xa.setURL("");
+		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+		xaDataSource.setXaDataSource(xa);
 		xaDataSource.setUniqueResourceName("xads");
 		xaDataSource.setMaxPoolSize(100);
 		xaDataSource.setMinPoolSize(1);
 		return xaDataSource;
 	}
 	
-	public Properties xaAProperties() {
-		Properties xaProp = new Properties();
-		xaProp.put("databaseName", "persistencejpa");
-		xaProp.put("user", "spring");
-		xaProp.put("password", "spring");
-		xaProp.put("pinGlobalTxToPhysicalConnection", true);
-		return xaProp;
-	}
 	
 }

@@ -25,6 +25,7 @@ public class JTAConfiguration {
 		atProps.put("com.atomikos.icatch.service", "com.atomikos.icatch.standalone.UserTransactionServiceFactory");
 		atProps.put("com.atomikos.icatch.log_base_dir", "D:\\Works\\TransactionLog");
 		atProps.put("com.atomikos.icatch.default_jta_timeout", "12345");
+		atProps.put("com.atomikos.icatch.console_log_level", "WARN");
 		return new UserTransactionServiceImp(atProps);
 	} 
 	
