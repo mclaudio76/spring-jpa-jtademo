@@ -13,8 +13,6 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-import mclaudio76.persistence.springjpajta.services.JTAPlatform;
-
 /*****
  * Provides an EntityManager configuration for a MySQL datasource.
  * 

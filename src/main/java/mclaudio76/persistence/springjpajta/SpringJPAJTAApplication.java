@@ -22,7 +22,7 @@ import mclaudio76.persistence.springjpajta.services.PersonService;
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class,XADataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 @EnableTransactionManagement
 public class SpringJPAJTAApplication {
-
+	
 	@Autowired
 	PersonService service;
 	

@@ -2,7 +2,9 @@ package mclaudio76.persistence.springjpajta.config;
 
 import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -10,21 +12,15 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 
 import com.atomikos.icatch.config.UserTransactionService;
 import com.atomikos.icatch.config.UserTransactionServiceImp;
-
-import mclaudio76.persistence.springjpajta.services.JTAPlatform;
+import com.atomikos.icatch.jta.UserTransactionImp;
+import com.atomikos.icatch.jta.UserTransactionManager;
 
 @Configuration
 public class JTAConfiguration {
 	
-	private JTAPlatform platform;
-	
-	@Autowired
-	public void setJTAPlatform(JTAPlatform platform) {
-		this.platform = platform;
-	}
 	
 	@Bean(initMethod = "init", destroyMethod = "shutdownForce")
-	public UserTransactionService userTransactionService(){
+	public UserTransactionService userTransactionProperties(){
 		Properties atProps = new Properties();
 		atProps.put("com.atomikos.icatch.service", "com.atomikos.icatch.standalone.UserTransactionServiceFactory");
 		atProps.put("com.atomikos.icatch.log_base_dir", "D:\\Works\\TransactionLog");
@@ -34,9 +30,22 @@ public class JTAConfiguration {
 	
 	@Bean("CustomTransactionManager")
 	public PlatformTransactionManager getTransactionManager() {
-		JtaTransactionManager txManager =  new JtaTransactionManager(platform.retrieveUserTransaction(), platform.retrieveTransactionManager());
+		JtaTransactionManager txManager =  new JtaTransactionManager(userTransaction(), transactionManager());
 		txManager.afterPropertiesSet();
 		return txManager;
 	}
+	
+	@Bean("JTAPlatformTransactionManager")
+	public TransactionManager transactionManager() {
+		UserTransactionManager txManager =  new com.atomikos.icatch.jta.UserTransactionManager();
+		return txManager;
+	}
+
+	@Bean("JTAPlatformUserTransaction")
+	protected UserTransaction userTransaction() {
+		UserTransactionImp userTransaction = new UserTransactionImp();
+		return userTransaction;
+	}
+	
 	
 }
