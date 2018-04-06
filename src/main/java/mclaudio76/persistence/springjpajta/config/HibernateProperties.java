@@ -9,6 +9,7 @@ import mclaudio76.persistence.springjpajta.services.JTAPlatform;
 
 @Configuration
 public class HibernateProperties {
+	
 	@Bean("hibernate-props")
 	public Properties getHibernateProperties() {
 		 Properties properties = new Properties();

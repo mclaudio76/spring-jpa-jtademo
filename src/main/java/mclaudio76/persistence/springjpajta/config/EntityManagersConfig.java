@@ -5,12 +5,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.transaction.jta.NarayanaJtaConfiguration;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
-import org.springframework.boot.jta.narayana.NarayanaBeanFactoryPostProcessor;
-import org.springframework.boot.jta.narayana.NarayanaConfigurationBean;
-import org.springframework.boot.jta.narayana.NarayanaRecoveryManagerBean;
-import org.springframework.boot.jta.narayana.NarayanaXADataSourceWrapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -34,14 +29,14 @@ import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
  */
 
 @Configuration
-public class PrimaryDatasourceConfig {
+public class EntityManagersConfig {
 	
 	
 	@Bean(name="mysql-primaryjpa")
 	@DependsOn("JTAPlatform")
-    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
+    public LocalContainerEntityManagerFactoryBean firstEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(datasource());
+        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring", "DS-XA-1"));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -51,25 +46,19 @@ public class PrimaryDatasourceConfig {
         return em;
     }
 	
-	
-	private DataSource datasource() {
-		MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
-		mysqlXaDataSource.setUrl("jdbc:mysql://localhost:3306/persistencejpa");
-		mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
-		mysqlXaDataSource.setPassword("spring");
-		mysqlXaDataSource.setUser("spring");
-		return mysqlXaDataSource;
-		/*AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-		xaDataSource.setXaDataSource(mysqlXaDataSource);
-		xaDataSource.setUniqueResourceName("xads");
-		xaDataSource.setMaxPoolSize(100);
-		xaDataSource.setMinPoolSize(1); 
-		return xaDataSource; */ 
-		
-	}
-	
-	
-	
+	@Bean(name="mysql-secondaryjpa")
+	@DependsOn("JTAPlatform")
+    public LocalContainerEntityManagerFactoryBean secondEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring", "DS-XA-2"));
+        em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setPersistenceUnitName("mysql-secondaryjpa");
+        em.setJpaProperties(properties);
+        em.afterPropertiesSet();
+        return em;
+    }
 	
 	
 }
