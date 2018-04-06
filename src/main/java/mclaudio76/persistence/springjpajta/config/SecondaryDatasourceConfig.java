@@ -18,7 +18,7 @@ public class SecondaryDatasourceConfig {
 	
 	
 	@Bean(name="mysql-secondaryjpa")
-	@DependsOn("CustomTransactionManager")
+	@DependsOn("JTAPlatform")
     public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(datasource());

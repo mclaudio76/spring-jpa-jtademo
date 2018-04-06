@@ -5,7 +5,6 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -13,7 +12,6 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-import com.microsoft.sqlserver.jdbc.SQLServerXADataSource;
 import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
 
 /*****
@@ -34,7 +32,7 @@ public class PrimaryDatasourceConfig {
 	
 	
 	@Bean(name="mysql-primaryjpa")
-	@DependsOn("CustomTransactionManager")
+	@DependsOn("JTAPlatform")
     public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(datasource());
@@ -53,26 +51,18 @@ public class PrimaryDatasourceConfig {
 		mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
 		mysqlXaDataSource.setPassword("spring");
 		mysqlXaDataSource.setUser("spring");
+		return mysqlXaDataSource;
 		
-		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+		/*AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
 		xaDataSource.setXaDataSource(mysqlXaDataSource);
 		xaDataSource.setUniqueResourceName("xads");
 		xaDataSource.setMaxPoolSize(100);
 		xaDataSource.setMinPoolSize(1); 
-		return xaDataSource;
+		return xaDataSource; */
 	}
 	
 	
-	private DataSource sqlServerDataSource() {
-		SQLServerXADataSource xa = new SQLServerXADataSource();
-		xa.setURL("");
-		AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-		xaDataSource.setXaDataSource(xa);
-		xaDataSource.setUniqueResourceName("xads");
-		xaDataSource.setMaxPoolSize(100);
-		xaDataSource.setMinPoolSize(1);
-		return xaDataSource;
-	}
+	
 	
 	
 }

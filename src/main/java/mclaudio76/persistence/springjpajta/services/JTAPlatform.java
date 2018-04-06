@@ -1,50 +1,48 @@
 package mclaudio76.persistence.springjpajta.services;
 
+import java.util.logging.Logger;
+
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
 import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatform;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.atomikos.icatch.jta.UserTransactionImp;
-
 /****
- * Provides a JTAPlatform wrapper using Atomikos JTA.
- * One may use other JTA open providers.
+ * Provides a JTAPlatform concrete implementation to be set as hibernate.transaction.jta.platform property 
+ * while configure EntityManagers.
  *
  */
 
-@Component
+@Component("JTAPlatform")
 public class JTAPlatform extends AbstractJtaPlatform {
 
 	private static final long serialVersionUID = 1L;
 	
-	private TransactionManager txManager;
-	private UserTransaction    userTx;
+	private static TransactionManager txManager;
+	private static UserTransaction    userTx;
 	
 	@Autowired
-	public void setJTAPlatformTXManager(@Qualifier("JTAPlatformTransactionManager") TransactionManager txManager) {
+	public void setJTAPlatformTXManager(TransactionManager txManager) {
 		this.txManager = txManager;
+		Logger.getLogger(this.getClass().getCanonicalName()).info("Inject TxManager "+txManager);
 	}
 	
 	@Autowired
-	public void setJTAPlatformUserTransaction(@Qualifier("JTAPlatformUserTransaction") UserTransaction userTx) {
+	public void setJTAPlatformUserTransaction(UserTransaction userTx) {
 		this.userTx = userTx;
 	}
 	
 
 	@Override
 	protected TransactionManager locateTransactionManager() {
-		TransactionManager ret = txManager == null ? new com.atomikos.icatch.jta.UserTransactionManager() : txManager;
-		return ret;
+		return txManager;
 	}
 
 	@Override
 	protected UserTransaction locateUserTransaction() {
-		UserTransaction uxt = userTx == null ? new UserTransactionImp() : userTx;
-		return uxt;
+		return userTx;
 	}
 	
 	

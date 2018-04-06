@@ -20,25 +20,15 @@ public class PersonService {
 		this.dao = dao;
 		this.locator = locator;
 	}
-
 	
-	public void savePerson(Person p) {
+	public void testTransaction(Person p) throws Exception{
 		EntityManager em = locator.getEntityManager("primary");
-		
-		dao.savePerson(em, p);
-	}
-
-
-	public void removePerson(Person p) {
-		EntityManager em = locator.getEntityManager("primary");
-		dao.deletePerson(em, p);
-	}
-
-	
-	public void doBoth(Person p) throws Exception{
-		EntityManager em = locator.getEntityManager("primary");
-		dao.savePerson(em, p);
 		EntityManager em2 = locator.getEntityManager("secondary");
+		// First: clean up
+		dao.deletePerson(em, p);
+		dao.deletePerson(em2, p);
+		// Second: save.
+		dao.savePerson(em, p);
 		dao.savePerson(em2, p);
 	}
 

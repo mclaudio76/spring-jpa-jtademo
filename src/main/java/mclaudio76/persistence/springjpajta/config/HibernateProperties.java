@@ -9,7 +9,6 @@ import mclaudio76.persistence.springjpajta.services.JTAPlatform;
 
 @Configuration
 public class HibernateProperties {
-
 	@Bean("hibernate-props")
 	public Properties getHibernateProperties() {
 		 Properties properties = new Properties();
@@ -19,7 +18,6 @@ public class HibernateProperties {
          // MOST IMPORTANT ! We need to tell Hibernate to use JTA as transaction coordinator.
          properties.setProperty("hibernate.transaction.coordinator_class", "jta");
          properties.setProperty("hibernate.transaction.jta.platform", JTAPlatform.class.getCanonicalName());
-         
          return properties;
 	}
 }

@@ -33,17 +33,11 @@ public class SpringJPAJTAApplication {
 	@Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-        	System.err.println("Init....");
         	Person p = new Person();
         	p.id     = 39;
         	p.firstName = "John";
-        	p.lastName  = "Doe"; 
-        	service.savePerson(p);
-        	System.err.println("Saved");
-        	service.removePerson(p);
-        	service.doBoth(p);
-        	service.doBoth(p);
-        	service.doBoth(p);
+        	p.lastName  = "Doe";
+        	service.testTransaction(p);
         };
     }
 }
