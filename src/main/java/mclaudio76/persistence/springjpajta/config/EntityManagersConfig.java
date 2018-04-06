@@ -2,18 +2,13 @@ package mclaudio76.persistence.springjpajta.config;
 
 import java.util.Properties;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-
-import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
 
 /*****
  * Provides an EntityManager configuration for a MySQL datasource.
@@ -36,7 +31,7 @@ public class EntityManagersConfig {
 	@DependsOn("JTAPlatform")
     public LocalContainerEntityManagerFactoryBean firstEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring", "DS-XA-1"));
+        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring", ""));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -50,7 +45,7 @@ public class EntityManagersConfig {
 	@DependsOn("JTAPlatform")
     public LocalContainerEntityManagerFactoryBean secondEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring", "DS-XA-2"));
+        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring", ""));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
