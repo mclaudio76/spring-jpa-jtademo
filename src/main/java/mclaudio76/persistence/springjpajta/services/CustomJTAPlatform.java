@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component("JTAPlatform")
-public class JTAPlatform extends AbstractJtaPlatform {
+public class CustomJTAPlatform extends AbstractJtaPlatform {
 
 	private static final long serialVersionUID = 1L;
 	

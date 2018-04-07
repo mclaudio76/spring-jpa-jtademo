@@ -2,6 +2,8 @@ package mclaudio76.persistence.springjpajta.config;
 
 import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +31,7 @@ public class EntityManagersConfig {
 	
 	@Bean(name="mysql-primaryjpa")
 	@DependsOn("JTAPlatform")
-    public LocalContainerEntityManagerFactoryBean firstEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
+   public EntityManagerFactory firstEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring", ""));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
@@ -38,12 +40,12 @@ public class EntityManagersConfig {
         em.setPersistenceUnitName("mysql-primaryjpa");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
-        return em;
+        return em.getNativeEntityManagerFactory();
     }
 	
 	@Bean(name="mysql-secondaryjpa")
 	@DependsOn("JTAPlatform")
-    public LocalContainerEntityManagerFactoryBean secondEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
+    public EntityManagerFactory secondEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring", ""));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
@@ -52,7 +54,7 @@ public class EntityManagersConfig {
         em.setPersistenceUnitName("mysql-secondaryjpa");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
-        return em;
+        return em.getNativeEntityManagerFactory();
     }
 	
 	

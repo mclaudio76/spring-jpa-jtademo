@@ -5,7 +5,7 @@ import java.util.Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import mclaudio76.persistence.springjpajta.services.JTAPlatform;
+import mclaudio76.persistence.springjpajta.services.CustomJTAPlatform;
 
 @Configuration
 public class HibernateProperties {
@@ -18,7 +18,8 @@ public class HibernateProperties {
          properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
          // MOST IMPORTANT ! We need to tell Hibernate to use JTA as transaction coordinator.
          properties.setProperty("hibernate.transaction.coordinator_class", "jta");
-         properties.setProperty("hibernate.transaction.jta.platform", JTAPlatform.class.getCanonicalName());
+         properties.setProperty("hibernate.transaction.factory_class","org.hibernate.transaction.JTATransactionFactory");
+         properties.setProperty("hibernate.transaction.jta.platform", CustomJTAPlatform.class.getCanonicalName());
          return properties;
 	}
 }
