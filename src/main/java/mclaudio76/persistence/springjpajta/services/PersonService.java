@@ -21,6 +21,7 @@ public class PersonService {
 		this.locator = locator;
 	}
 	
+	@Transactional
 	public void testTransaction(Person p) throws Exception{
 		EntityManager em = locator.getEntityManager("primary");
 		EntityManager em2 = locator.getEntityManager("secondary");

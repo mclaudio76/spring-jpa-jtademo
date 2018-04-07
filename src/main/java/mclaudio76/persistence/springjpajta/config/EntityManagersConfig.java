@@ -28,12 +28,12 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @Configuration
 public class EntityManagersConfig {
 	
-	
-	@Bean(name="mysql-primaryjpa")
-	@DependsOn("JTAPlatform")
+		
+   @Bean(name="mysql-primaryjpa")
+   @DependsOn("CustomJTAPlatform")
    public EntityManagerFactory firstEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring", ""));
+        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring", "XA1"));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -44,10 +44,10 @@ public class EntityManagersConfig {
     }
 	
 	@Bean(name="mysql-secondaryjpa")
-	@DependsOn("JTAPlatform")
+	@DependsOn("CustomJTAPlatform")
     public EntityManagerFactory secondEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring", ""));
+        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring", "XA2"));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -56,6 +56,5 @@ public class EntityManagersConfig {
         em.afterPropertiesSet();
         return em.getNativeEntityManagerFactory();
     }
-	
 	
 }
