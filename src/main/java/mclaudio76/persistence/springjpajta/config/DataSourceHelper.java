@@ -6,6 +6,8 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
+import org.springframework.boot.jta.bitronix.PoolingDataSourceBean;
+import org.springframework.boot.jta.narayana.NarayanaDataSourceBean;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
 
@@ -20,6 +22,9 @@ public class DataSourceHelper {
 
 	private static int MAX_POOL = 100;
 	private static int MIN_POOL = 1;
+	private enum JTAImplementation  {NARAYANA,ATOMIKOS,BITRONIX};
+	
+	private static JTAImplementation jtaPlatform = JTAImplementation.NARAYANA;
 	
 	public DataSourceHelper(Properties config) {
 		// TO DO....
@@ -33,35 +38,50 @@ public class DataSourceHelper {
 		mysqlXaDataSource.setUser(user);
 		// Most important: to actually use an XA transaction, we need to "wrap" underlying datasource
 		// with a bean handled by JTA implementation. Otherwise, a LCT transaction will be performed.
-		return wrapWithJTABean(mysqlXaDataSource,dataSourceID);
+		return wrapXADataSource(mysqlXaDataSource,dataSourceID);
 	}
 	
+	
+	private DataSource wrapXADataSource(XADataSource ds, String uniqueXAIdentifier) {
+		switch(jtaPlatform) {
+			case  NARAYANA : return narayanaWrapper(ds,uniqueXAIdentifier);
+			case  ATOMIKOS : return atomikosWrapper(ds, uniqueXAIdentifier);
+			case  BITRONIX : return bitronixWrapper(ds, uniqueXAIdentifier);
+		}
+		return (DataSource) ds;
+	}
+	
+	
+	
 	// Wrapper for Narayana
-	/*private DataSource wrapWithJTABean(XADataSource ds, String uniqueXAName) {
+	private DataSource narayanaWrapper(XADataSource ds, String uniqueXAName) {
 		NarayanaDataSourceBean wrapper = new NarayanaDataSourceBean(ds);
+		
 		return wrapper;
-	}*/
+	}
 	
 	//Wrapper for Atomikos
-	private DataSource wrapWithJTABean(XADataSource ds, String uniqueXAName) {
-		AtomikosDataSourceBean wrapper = new AtomikosDataSourceBean();
+	private DataSource atomikosWrapper(XADataSource ds, String uniqueXAName) {
+		/*AtomikosDataSourceBean wrapper = new AtomikosDataSourceBean();
 		wrapper.setUniqueResourceName(uniqueXAName);
 		wrapper.setMaxPoolSize(MAX_POOL);
 		wrapper.setMinPoolSize(MIN_POOL);
-		wrapper.setXaDataSource(ds);
-		return wrapper;
+		wrapper.setXaDataSource(ds); 
+		return wrapper */
+		return (DataSource) ds;
 	}  
 	
 
 	// Wrapper for Bitronix: include spring-boot-starter-jta-bitronix in pom
-	/*private DataSource wrapWithJTABean(XADataSource ds, String uniqueXAName) {
-		PoolingDataSourceBean wrapper = new PoolingDataSourceBean();
-		wrapper.setUniqueName(uniqueXAName);
-		wrapper.setMaxPoolSize(MAX_POOL);
-		wrapper.setMinPoolSize(MIN_POOL);
+	private DataSource bitronixWrapper(XADataSource ds, String uniqueXAName) {
+		/*PoolingDataSourceBean wrapper = new PoolingDataSourceBean();
 		wrapper.setDataSource(ds);
-		return wrapper;
-	} */ 
+		wrapper.setMaxPoolSize(MAX_POOL);
+		wrapper.setMaxPoolSize(MIN_POOL);
+		wrapper.setUniqueName(uniqueXAName);
+		return wrapper; */
+		return (DataSource) ds;
+	} 
 
 
 }
