@@ -15,8 +15,9 @@ import mclaudio76.persistence.springjpajta.entities.Person;
 import mclaudio76.persistence.springjpajta.services.PersonService;
 
 /****
- * We need to exclude DataSoruceAutoConfiguration.class and similar to avoid nasty errors due to Spring trying to instantiate
- * default datasources and other default configs.
+ * We need to exclude DataSourceAutoConfiguration.class and other @Configuration tagget classes to avoid 
+ * nasty errors due to Spring trying to instantiate default beans. In this project, we don't have a default
+ * datasource.
  * 
  */
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class,XADataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
@@ -34,8 +35,8 @@ public class SpringJPAJTAApplication {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
         	Person p = new Person();
-        	p.id     = 39;
-        	p.firstName = "John";
+        	p.id     = 40;
+        	p.firstName = "Jane";
         	p.lastName  = "Doe";
         	service.testTransaction(p);
         };

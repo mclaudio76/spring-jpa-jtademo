@@ -20,38 +20,43 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
  * - LocalContainerEntityManagerFactoryBean is annotatated with @Bean(name=identifier), so that we can later
  *       inject it with @PersistenceContext(unitName=identifier) (@see EntityManagerLocator)
  * 
- * - I did not used an XA Connection.
- *
- * - We need to tell Hibernate to use JTA as transaction manager, putting hibernate.transaction.coordinator_class = jta.
+ * - We need to tell Hibernate to use JTA as transaction manager, putting hibernate.transaction.coordinator_class = jta, because
+ *   we are going to use multiple sql datasources.
+ *   
  */
 
 @Configuration
 public class EntityManagersConfig {
 	
-		
-   @Bean(name="mysql-primaryjpa")
+   @Bean
+   public DataSourceHelper dataSourceHelper() {
+	   return new DataSourceHelper(new Properties());
+   }
+	
+	
+   @Bean(name="firstEntityManager")
    @DependsOn("CustomJTAPlatform")
-   public EntityManagerFactory firstEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
+   public EntityManagerFactory firstEntityManagerFactory(@Qualifier("hibernate-props") Properties properties, DataSourceHelper dsHelper) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring", "XA1"));
+        em.setDataSource(dsHelper.datasource("XADS1","jdbc:mysql://localhost:3306/persistencejpa", "spring", "spring"));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-        em.setPersistenceUnitName("mysql-primaryjpa");
+        em.setPersistenceUnitName("firstEntityManager");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
         return em.getNativeEntityManagerFactory();
     }
 	
-	@Bean(name="mysql-secondaryjpa")
+	@Bean(name="secondEntityManager")
 	@DependsOn("CustomJTAPlatform")
-    public EntityManagerFactory secondEntityManagerFactory(@Qualifier("hibernate-props") Properties properties) {
+    public EntityManagerFactory secondEntityManagerFactory(@Qualifier("hibernate-props") Properties properties, DataSourceHelper dsHelper) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(DataSourceHelper.datasource("jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring", "XA2"));
+        em.setDataSource(dsHelper.datasource("XADS2","jdbc:mysql://localhost:3306/secondpersistence", "spring", "spring"));
         em.setPackagesToScan(new String[] { "mclaudio76.persistence.springjpajta" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-        em.setPersistenceUnitName("mysql-secondaryjpa");
+        em.setPersistenceUnitName("secondEntityManager");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
         return em.getNativeEntityManagerFactory();

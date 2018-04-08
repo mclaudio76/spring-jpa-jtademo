@@ -8,6 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import mclaudio76.persistence.springjpajta.entities.Person;
 
+/**
+ * Trivial service persisting via a DAO bean an entity on two different datasources.
+ *  
+ */
+
 @Service
 @Transactional(rollbackFor=Exception.class)
 public class PersonService {
@@ -23,8 +28,8 @@ public class PersonService {
 	
 	@Transactional
 	public void testTransaction(Person p) throws Exception{
-		EntityManager em = locator.getEntityManager("primary");
-		EntityManager em2 = locator.getEntityManager("secondary");
+		EntityManager em  = locator.lookupEntityManager("primary");
+		EntityManager em2 = locator.lookupEntityManager("secondary");
 		// First: clean up
 		dao.deletePerson(em, p);
 		dao.deletePerson(em2, p);

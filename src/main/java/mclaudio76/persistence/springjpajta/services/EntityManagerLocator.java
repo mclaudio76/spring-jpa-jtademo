@@ -15,25 +15,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class EntityManagerLocator {
 	
-	private EntityManager primaryJPA   = null;
-	private EntityManager secondaryJPA = null;
+	private EntityManager firstEntityManager   = null;
+	private EntityManager secondEntityManager = null;
 	
-	@PersistenceContext(unitName="mysql-primaryjpa")
+	@PersistenceContext(unitName="firstEntityManager")
     public void setPrimaryEntityManager(EntityManager entityManager) {
-        this.primaryJPA = entityManager;
+        this.firstEntityManager = entityManager;
     }
 	
-	@PersistenceContext(unitName="mysql-secondaryjpa")
+	@PersistenceContext(unitName="secondEntityManager")
     public void setSecondaryEntityManager(EntityManager entityManager) {
-        this.secondaryJPA = entityManager;
+        this.secondEntityManager = entityManager;
     }
 	
-	public EntityManager getEntityManager(String enviroment) {
+	public EntityManager lookupEntityManager(String enviroment) {
 		if(enviroment.trim().equals("primary")) {
-			return primaryJPA;
+			return firstEntityManager;
 		}
 		else {
-			return secondaryJPA;
+			return secondEntityManager;
 		}
 	}
 }
