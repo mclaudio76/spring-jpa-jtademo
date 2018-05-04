@@ -5,8 +5,6 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
-import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
-import org.springframework.boot.jta.bitronix.PoolingDataSourceBean;
 import org.springframework.boot.jta.narayana.NarayanaDataSourceBean;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
@@ -28,7 +26,7 @@ public class DataSourceHelper {
 	
 	public DataSourceHelper(Properties config) {
 		// TO DO....
-	}
+	} 
 	
 	public DataSource datasource(String dataSourceID, String url, String user, String pwd) {
 		MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
@@ -36,6 +34,7 @@ public class DataSourceHelper {
 		mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
 		mysqlXaDataSource.setPassword(pwd);
 		mysqlXaDataSource.setUser(user);
+		
 		// Most important: to actually use an XA transaction, we need to "wrap" underlying datasource
 		// with a bean handled by JTA implementation. Otherwise, a LCT transaction will be performed.
 		return wrapXADataSource(mysqlXaDataSource,dataSourceID);
