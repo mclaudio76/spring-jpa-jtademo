@@ -8,7 +8,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'mvn -B -DskipTests clean package'
+        bat(script: 'mvn -B -DskipTests clean package', returnStatus: true)
       }
     }
   }
