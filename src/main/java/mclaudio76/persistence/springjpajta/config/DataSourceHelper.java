@@ -37,6 +37,7 @@ public class DataSourceHelper {
 		
 		// Most important: to actually use an XA transaction, we need to "wrap" underlying datasource
 		// with a bean handled by JTA implementation. Otherwise, a LCT transaction will be performed.
+		// Not all of provided JTA Transaction Manager offer a wrapper able to support a MAX, MIN Pool.
 		return wrapXADataSource(mysqlXaDataSource,dataSourceID);
 	}
 	
