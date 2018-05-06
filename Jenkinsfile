@@ -12,8 +12,4 @@ pipeline {
             }
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> branch 'master' of https://github.com/mclaudio76/spring-jpa-jtademo
