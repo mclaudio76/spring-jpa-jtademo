@@ -18,8 +18,8 @@ import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
 
 public class DataSourceHelper {
 
-	private static int MAX_POOL = 100;
-	private static int MIN_POOL = 1;
+	private final static int MAX_POOL = 100;
+	private final static int MIN_POOL = 1;
 	private enum JTAImplementation  {NARAYANA,ATOMIKOS,BITRONIX};
 	
 	private static JTAImplementation jtaPlatform = JTAImplementation.NARAYANA;
