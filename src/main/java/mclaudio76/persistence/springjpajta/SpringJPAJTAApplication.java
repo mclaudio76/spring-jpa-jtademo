@@ -36,7 +36,7 @@ public class SpringJPAJTAApplication {
         return args -> {
         	Person p = new Person();
         	p.id     = 40;
-        	p.firstName = "Jane";
+        	p.firstName = "John";
         	p.lastName  = "Doe";
         	service.testTransaction(p);
         };
